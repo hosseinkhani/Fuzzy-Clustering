@@ -1,7 +1,7 @@
+import matplotlib.lines as shapes
 import numpy as np
-from matplotlib.lines import Line2D
 
-from lib.BaseFuzzyCluster import BaseFuzzyCluster
+from ..BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class LinearCluster(BaseFuzzyCluster):
@@ -27,10 +27,13 @@ class LinearCluster(BaseFuzzyCluster):
     def __repr__(self):
         return "Linear cluster# v={0} e={1}".format(self.v, self.e)
 
+    def center(self):
+        return self.v
+
     def draw(self):
         k1 = self.v - 1000 * self.e
         k2 = self.v + 1000 * self.e
-        return Line2D([k1[0], k2[0]], [k1[1], k2[1]], lw=3.)
+        return shapes.Line2D([k1[0], k2[0]], [k1[1], k2[1]], lw=3.)
 
     def is_same(self, cluster):
         if type(cluster) != LinearCluster:

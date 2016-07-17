@@ -1,0 +1,3 @@
+class FuzzyClassifierException(Exception):
+    pass
+

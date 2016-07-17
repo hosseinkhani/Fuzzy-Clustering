@@ -1,7 +1,7 @@
+import matplotlib.patches as shapes
 import numpy as np
-from matplotlib.patches import Ellipse
 
-from lib.BaseFuzzyCluster import BaseFuzzyCluster
+from ..BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class EllipticalCluster(BaseFuzzyCluster):
@@ -37,8 +37,11 @@ class EllipticalCluster(BaseFuzzyCluster):
 
         # Width and height are "full" widths, not radius
         height, width = self.r * np.sqrt(vals)
-        ellip = Ellipse(xy=self.v, width=width, height=height, angle=theta)
+        ellip = shapes.Ellipse(xy=self.v, width=width, height=height, angle=theta)
         return ellip
+
+    def center(self):
+        return self.v
 
     def is_same(self, cluster):
         if type(cluster) != EllipticalCluster:
@@ -73,20 +76,17 @@ class EllipticalCluster2(BaseFuzzyCluster):
     def draw(self):
         c = np.dot(self.v1, self.v2)/np.linalg.norm(self.v1)/np.linalg.norm(self.v2)
         angle = np.arccos(np.clip(c, -1, 1))
-        ellip = Ellipse(xy=(self.v1+self.v2)/2, width=1.5*self.r, height=self.r, angle=np.rad2deg(angle))
+        ellip = shapes.Ellipse(xy=(self.v1+self.v2)/2, width=1.5*self.r, height=self.r, angle=np.rad2deg(angle))
         return ellip
+
+    def center(self):
+        return (self.v1+self.v2)/2
 
     def is_same(self, cluster):
         if type(cluster) != EllipticalCluster:
             return False
         # print np.linalg.norm(cluster.v-self.v) + (self.r-cluster.r)**2 + np.linalg.norm(cluster.A-self.A)**2, '&'*10
         return np.linalg.norm(cluster.v-self.v) + (self.r-cluster.r)**2 + np.linalg.norm(cluster.A-self.A)**2 < 50
-
-    def __getattr__(self, item):
-        if item == 'v':
-            return (self.v1+self.v2)/2
-        else:
-            BaseFuzzyCluster.__getattr__(self, item)
 
     @staticmethod
     def valid_distance(noise):

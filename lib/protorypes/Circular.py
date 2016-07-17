@@ -1,7 +1,7 @@
+import matplotlib.patches as shapes
 import numpy as np
-from matplotlib.patches import Circle
 
-from lib.BaseFuzzyCluster import BaseFuzzyCluster
+from ..BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class CircularCluster(BaseFuzzyCluster):
@@ -22,7 +22,10 @@ class CircularCluster(BaseFuzzyCluster):
         return "Circular cluster# v={0} r={1}".format(self.v, self.r)
 
     def draw(self):
-        return Circle(xy=self.v, radius=self.r)
+        return shapes.Circle(xy=self.v, radius=self.r)
+
+    def center(self):
+        return self.v
 
     def is_same(self, cluster):
         if type(cluster) != CircularCluster:
@@ -33,3 +36,5 @@ class CircularCluster(BaseFuzzyCluster):
     @staticmethod
     def valid_distance(noise):
         return 5 * noise**2
+
+# print np.array([1, 2])

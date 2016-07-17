@@ -3,7 +3,7 @@ import numpy as np
 from copy import deepcopy
 
 import data_loader as datagen
-from FuzzyClustring import fuzzy_clustring_algorithm
+from lib.FuzzyClustring import fuzzy_clustring_algorithm
 from lib.protorypes.Circular import CircularCluster
 from lib.protorypes.Elliptical import EllipticalCluster, EllipticalCluster2
 from lib.protorypes.Linear import LinearCluster
