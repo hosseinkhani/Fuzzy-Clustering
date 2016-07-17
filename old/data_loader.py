@@ -55,15 +55,3 @@ def generate_2d_line_dataset(lines, q=1000, noise=10):
             i -= 1
 
     return res
-
-
-def load_generated_data():
-    res = []
-    n = 0
-    with file('data.txt', 'r') as infile:
-        for line in infile.readlines():
-            n += 1
-            l = [float(x) for x in line.strip().split()]
-            res.append(l)
-
-    return np.array(res).reshape((n, 2))

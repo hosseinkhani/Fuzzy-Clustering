@@ -1,6 +1,7 @@
 import numpy as np
-from BaseFuzzyCluster import BaseFuzzyCluster
 from matplotlib.patches import Circle
+
+from lib.BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class CircularCluster(BaseFuzzyCluster):

@@ -1,6 +1,7 @@
 import numpy as np
-from BaseFuzzyCluster import BaseFuzzyCluster
 from matplotlib.patches import Ellipse
+
+from lib.BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class EllipticalCluster(BaseFuzzyCluster):

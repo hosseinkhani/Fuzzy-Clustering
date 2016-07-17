@@ -1,13 +1,12 @@
-import data as datagen
-import numpy as np
 import matplotlib.pyplot as plt
-
-from Elliptical import EllipticalCluster, EllipticalCluster2
-from Circular import CircularCluster
-from Linear import LinearCluster
-from FuzzyClustring import fuzzy_clustring_algorithm
+import numpy as np
 from copy import deepcopy
-from random import shuffle
+
+import data_loader as datagen
+from FuzzyClustring import fuzzy_clustring_algorithm
+from lib.protorypes.Circular import CircularCluster
+from lib.protorypes.Elliptical import EllipticalCluster, EllipticalCluster2
+from lib.protorypes.Linear import LinearCluster
 
 
 def scatter_data(clusters_data):

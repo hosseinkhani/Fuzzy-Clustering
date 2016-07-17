@@ -1,6 +1,7 @@
 import numpy as np
-from BaseFuzzyCluster import BaseFuzzyCluster
 from matplotlib.lines import Line2D
+
+from lib.BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class LinearCluster(BaseFuzzyCluster):
