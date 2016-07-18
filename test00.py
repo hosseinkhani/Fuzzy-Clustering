@@ -92,20 +92,20 @@ def elliptical_test(clusters, ellipce_type=2, noise=10):
 
 
 if __name__ == '__main__':
-    print "CMEAN Test..."
-    cmean_test(clusters=3, noise=20)
+    # print "CMEAN Test..."
+    # cmean_test(clusters=3, noise=20)
 
     print "GustafsonKessel Test ..."
     gustafsonkessel_test(clusters=3, noise=20)
 
-    # print "GathGeva Test ..."
-    # gathgeva_test(clusters=3, noise=20)
+    print "GathGeva Test ..."
+    gathgeva_test(clusters=3, noise=20)
 
-    print "Linear Test..."
-    linear_test(clusters=3, noise=20)
+    # print "Linear Test..."
+    # linear_test(clusters=3, noise=20)
 
-    print "Circular Test..."
-    circular_test(clusters=3, noise=20)
+    # print "Circular Test..."
+    # circular_test(clusters=3, noise=20)
 
     # print "Elliptical Test..."
     # elliptical_test(clusters=3, ellipce_type=2, noise=20)

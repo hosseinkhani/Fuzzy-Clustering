@@ -23,8 +23,8 @@ class GGCluster(BaseFuzzyCluster):
 
     def distance(self, x):
         d = (x-self.v).reshape((2, 1)).T.dot(np.linalg.inv(self.A)).dot((x-self.v).reshape((2, 1)))[0][0]
-        print (np.linalg.det(self.A))**.5 * np.exp(.5 * d) / self.p
-        return (np.linalg.det(self.A))**.5 * np.exp(.5 * d) / self.p
+        print (np.linalg.det(self.A))**.5 * 1.5**(.5 * d) / self.p
+        return (np.linalg.det(self.A))**.5 * 1.5**(.5 * d) / self.p
 
     def __repr__(self):
         return "GathGeva cluster# v={0} A={1}, p={2}".format(self.v, self.A, self.p)
