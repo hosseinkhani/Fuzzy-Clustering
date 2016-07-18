@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from data import datagen_2d
 from lib import FuzzyClustring
-from lib.protorypes import Linear, Circular, Elliptical, CMean, GustafsonKessel
+from lib.protorypes import Linear, Circular, Elliptical, CMean, GustafsonKessel, GathGeva
 
 
 def scatter_2d_data(data):
@@ -63,6 +63,18 @@ def gustafsonkessel_test(clusters, noise=10):
     fc.scatter_clusters_data()
 
 
+def gathgeva_test(clusters, noise=10):
+    q = 100 * clusters
+    xs = datagen_2d.generate_2d_gathgeva_dataset(clusters, noise=noise, q=q)
+    scatter_2d_data(xs)
+
+    clusters = [GathGeva.GGCluster(1000, 2) for k in range(clusters)]
+    fc = FuzzyClustring.FuzzyClassifier(xs, clusters, m=2)
+    fc.fit(delta=.001, increase_iteration=20, increase_factor=1.2, plot_level=2, verbose_level=0, verbose_iteration=100)
+    print fc.C
+    fc.scatter_clusters_data()
+
+
 def elliptical_test(clusters, ellipce_type=2, noise=10):
     q = 50 * clusters
     xs = datagen_2d.generate_2d_ellipse_dataset(clusters, noise=noise, q=q)
@@ -80,17 +92,20 @@ def elliptical_test(clusters, ellipce_type=2, noise=10):
 
 
 if __name__ == '__main__':
-    # print "CMEAN Test..."
-    # cmean_test(clusters=3, noise=20)
+    print "CMEAN Test..."
+    cmean_test(clusters=3, noise=20)
 
     print "GustafsonKessel Test ..."
     gustafsonkessel_test(clusters=3, noise=20)
 
-    # print "Linear Test..."
-    # linear_test(clusters=3, noise=20)
+    # print "GathGeva Test ..."
+    # gathgeva_test(clusters=3, noise=20)
 
-    # print "Circular Test..."
-    # circular_test(clusters=3, noise=20)
+    print "Linear Test..."
+    linear_test(clusters=3, noise=20)
+
+    print "Circular Test..."
+    circular_test(clusters=3, noise=20)
 
     # print "Elliptical Test..."
     # elliptical_test(clusters=3, ellipce_type=2, noise=20)

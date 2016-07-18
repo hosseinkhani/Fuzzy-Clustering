@@ -20,6 +20,24 @@ def generate_2d_gustafsonkessel_dataset(clusters, q=1000, noise=10, radiuse=500)
     return res
 
 
+def generate_2d_gathgeva_dataset(clusters, q=1000, noise=10):
+    res = np.empty((q, 2))
+
+    centers = 1000/5 + np.random.uniform(size=(clusters, 2)) * 1000*3/5
+    radiuses = 50 + np.random.uniform(size=clusters) * 1000/5
+    covs = np.random.uniform(-3, 3, size=(clusters, 2, 2))
+    for k in range(clusters):
+        covs[k] = np.dot(covs[k], covs[k].T)
+        covs[k] += .9 * np.eye(2)
+        covs[k] *= radiuses[k]
+
+    for i in range(q):
+        ind = np.random.randint(clusters)
+        res[i] = np.random.multivariate_normal(centers[ind], covs[ind], 1)
+
+    return res
+
+
 def generate_2d_cmeans_dataset(clusters, q=1000, noise=10):
     res = np.empty((q, 2))
 

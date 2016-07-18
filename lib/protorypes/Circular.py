@@ -10,7 +10,7 @@ class CircularCluster(BaseFuzzyCluster):
         self.r = np.random.uniform(high/5)
         self.v = np.random.uniform(high, size=dim)
 
-    def update(self, xs, uis, m):
+    def _update(self, xs, uis, m):
         self.v = sum([uis[i]**m * xs[i] for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
         self.r = sum([uis[i]**m * np.linalg.norm(xs[i]-self.v) for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
         # self.v = sum([uis[i] * xs[i] for i in range(len(xs))]) / sum(uis)

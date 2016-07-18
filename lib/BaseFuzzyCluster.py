@@ -9,7 +9,17 @@ class BaseFuzzyCluster(object):
         """
         raise NotImplementedError
 
-    def update(self, xs, uis, m):
+    def update(self, xs, us, m, ci):
+        """
+        update its variables based on membership values
+        :param xs: list of data points
+        :param us: list of memberships for all clusteres
+        :param m:
+        :param ci: cluster num
+        """
+        self._update(xs, us[:, ci], m)
+
+    def _update(self, xs, uis, m):
         """
         update its variables based on membership values
         :param xs: list of data points

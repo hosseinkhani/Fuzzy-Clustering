@@ -12,7 +12,7 @@ class EllipticalCluster(BaseFuzzyCluster):
         self.det = det
         self.A = np.array([[2, 0], [0, det/20.0]])
 
-    def update(self, xs, uis, m):
+    def _update(self, xs, uis, m):
         self.v = sum([uis[i]**m * xs[i] for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
         self.r = sum([uis[i]**m * np.linalg.norm(xs[i]-self.v) for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
 
@@ -65,7 +65,7 @@ class EllipticalCluster2(BaseFuzzyCluster):
         self.v1 = np.random.uniform(high, size=dim)
         self.v2 = np.random.uniform(high, size=dim)
 
-    def update(self, xs, uis, m):
+    def _update(self, xs, uis, m):
         self.v1 = sum([uis[i]**m * (xs[i] + (np.linalg.norm(xs[i]-self.v2)-self.r)*(xs[i]-self.v1)/(np.linalg.norm(xs[i]-self.v1)))
                        for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
         self.v2 = sum([uis[i]**m * (xs[i] + (np.linalg.norm(xs[i]-self.v1)-self.r)*(xs[i]-self.v2)/(np.linalg.norm(xs[i]-self.v2)))

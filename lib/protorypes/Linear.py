@@ -11,7 +11,7 @@ class LinearCluster(BaseFuzzyCluster):
         self.e /= np.linalg.norm(self.e)
         self.v = np.random.uniform(high, size=dim)
 
-    def update(self, xs, uis, m):
+    def _update(self, xs, uis, m):
         self.v = sum([uis[i]**m * xs[i] for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
 
         C = sum([uis[i]**m * (xs[i]-self.v).reshape((2, 1)).dot((xs[i]-self.v).reshape((2, 1)).T)

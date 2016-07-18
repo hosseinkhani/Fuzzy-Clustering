@@ -12,7 +12,7 @@ class GKCluster(BaseFuzzyCluster):
         self.det = det
         self.A = np.array([[det**.5, 0], [0, det**.5]])
 
-    def update(self, xs, uis, m):
+    def _update(self, xs, uis, m):
         self.v = sum([uis[i]**m * xs[i] for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
 
         S = sum([uis[i]**m * (xs[i]-self.v).reshape((2, 1)).dot((xs[i]-self.v).reshape((2, 1)).T) for i in range(len(xs))])

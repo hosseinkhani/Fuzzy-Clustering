@@ -34,7 +34,7 @@ class FuzzyClassifier(object):
             iteration += 1
 
             for i, c in enumerate(self.C):
-                c.update(self.X, self.U[:, i], self.m)
+                c.update(self.X, self.U, self.m, i)
 
             dif = self.update_memberships()
 
