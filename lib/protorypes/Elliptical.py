@@ -41,8 +41,9 @@ class EllipticalCluster(BaseFuzzyCluster):
 
         # Width and height are "full" widths, not radius
         height, width = self.r * np.sqrt(vals)
-        ellip = shapes.Ellipse(xy=self.v, width=width, height=height, angle=theta)
-        return ellip
+        res = shapes.Ellipse(xy=self.v, width=width, height=height, angle=theta)
+        res.set_fill(False)
+        return res
 
     def center(self):
         return self.v
@@ -88,8 +89,9 @@ class EllipticalCluster2(BaseFuzzyCluster):
 
         c2 = np.dot(self.v1, self.v2)/np.linalg.norm(self.v1)/np.linalg.norm(self.v2)
         angle = np.arccos(np.clip(c2, -1, 1))
-        ellip = shapes.Ellipse(xy=(self.v1+self.v2)/2, width=a, height=b, angle=np.rad2deg(angle))
-        return ellip
+        res = shapes.Ellipse(xy=(self.v1+self.v2)/2, width=a, height=b, angle=np.rad2deg(angle))
+        res.set_fill(False)
+        return res
 
     def center(self):
         return (self.v1+self.v2)/2

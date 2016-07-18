@@ -104,7 +104,7 @@ class FuzzyClassifier(object):
             for i, c in enumerate(self.C):
                 ax.scatter(c.center()[0], c.center()[1], color='black')
                 ax.add_artist(shapes[i])
-                shapes[i].set_alpha(.1)
+                shapes[i].set_alpha(.5)
                 if i == selected:
                     shapes[i].set_color('red')
 
@@ -124,7 +124,7 @@ class FuzzyClassifier(object):
             try:
                 ax.scatter(c.center()[0], c.center()[1], color='black')
                 ax.add_artist(shapes[i])
-                shapes[i].set_alpha(.1)
+                shapes[i].set_alpha(.5)
             except FuzzyClassifierException as e:
                 print e, "No shape or center implemented!"
 

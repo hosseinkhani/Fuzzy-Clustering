@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 
 from data import datagen_2d
 from lib import FuzzyClustring
-from lib.protorypes import Linear, Circular, Elliptical
-
+from lib.protorypes import Linear, Circular, Elliptical, CMean
 
 
 def scatter_2d_data(data):
@@ -14,20 +13,6 @@ def scatter_2d_data(data):
     plt.xlim(0, 1000)
     plt.ylim(0, 1000)
     plt.show()
-
-# xs = datagen_2d.generate_2d_line_dataset(class_num, noise=NOISE, q=q)
-# xs = np.vstack((xs, datagen_2d.generate_2d_ellipse_dataset(1, noise=NOISE, q=q/4)))
-# xs = np.vstack((xs, datagen_2d.generate_2d_circle_dataset(1, noise=NOISE, q=q/4)))
-
-# xs = datagen_2d.generate_2d_circle_dataset(class_num, noise=NOISE, q=q)
-# datagen_2d.shuffle(xs)
-
-# scatter_2d_data(xs)
-
-# clusters = [Linear.LinearCluster(0, 1000, 2) for k in range(class_num)]
-# clusters = [Elliptical.EllipticalCluster(5, 1000/5, 4*1000/5, 2) for k in range(class_num)]
-# clusters = [Elliptical.EllipticalCluster2(1000/5, 4*1000/5, 2) for k in range(class_num)]
-# clusters = [Circular.CircularCluster(1000/5, 4*1000/5, 2) for k in range(class_num)]
 
 
 def linear_test(clusters, noise=10):
@@ -53,6 +38,17 @@ def circular_test(clusters, noise=10):
     print fc.C
     fc.scatter_clusters_data()
 
+def cmean_test(clusters, noise=10):
+    q = 100 * clusters
+    xs = datagen_2d.generate_2d_circularmass_dataset(clusters, noise=noise, q=q)
+    scatter_2d_data(xs)
+
+    clusters = [CMean.CMeanCluster(1000, 2) for k in range(clusters)]
+    fc = FuzzyClustring.FuzzyClassifier(xs, clusters, m=2)
+    fc.fit(delta=.001, increase_iteration=20, increase_factor=1.2, plot_level=2, verbose_level=0, verbose_iteration=100)
+    print fc.C
+    fc.scatter_clusters_data()
+
 
 def elliptical_test(clusters, ellipce_type=2, noise=10):
     q = 50 * clusters
@@ -71,9 +67,14 @@ def elliptical_test(clusters, ellipce_type=2, noise=10):
 
 
 if __name__ == '__main__':
-    print "Linear Test..."
-    linear_test(clusters=3, noise=20)
-    print "Circular Test..."
-    circular_test(clusters=3, noise=20)
+    print "CMEAN Test..."
+    cmean_test(clusters=3, noise=20)
+
+    # print "Linear Test..."
+    # linear_test(clusters=3, noise=20)
+
+    # print "Circular Test..."
+    # circular_test(clusters=3, noise=20)
+
     # print "Elliptical Test..."
     # elliptical_test(clusters=3, ellipce_type=2, noise=20)
