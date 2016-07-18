@@ -6,7 +6,7 @@ from .. import FuzzyClassifierException
 
 
 class EllipticalCluster(BaseFuzzyCluster):
-    def __init__(self, det, high, dim):
+    def __init__(self, high, dim, det=1):
         self.r = np.random.uniform(high/5)
         self.v = np.random.uniform(high, size=dim)
         self.det = det
