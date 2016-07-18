@@ -9,4 +9,4 @@ still in progress...
 run test00.py a simple demo (classify instances of one prototype)
 
 
-NOTE: ellipse prototype hav visual problems (maybe other problems exist too cuz it doesnt work like other prototypes)
+NOTE: ellipse prototype has visual problems (maybe other problems exist too cuz it doesnt work like other prototypes)
