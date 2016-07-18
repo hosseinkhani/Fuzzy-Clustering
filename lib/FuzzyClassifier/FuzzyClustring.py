@@ -2,7 +2,7 @@ import numpy as np
 import math
 from matplotlib import pyplot as plt
 
-from . import FuzzyClassifierException
+from lib import FuzzyClassifierException
 
 
 class FuzzyClassifier(object):

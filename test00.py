@@ -1,10 +1,10 @@
-import numpy as np
 import matplotlib.pyplot as plt
 
+from lib.protorypes import Circular, Elliptical, CMean, GustafsonKessel, GathGeva
 
 from data import datagen_2d
-from lib import FuzzyClustring
-from lib.protorypes import Linear, Circular, Elliptical, CMean, GustafsonKessel, GathGeva
+from lib.FuzzyClassifier import FuzzyClustring
+from lib.FuzzyClassifier.protorypes import Linear
 
 
 def scatter_2d_data(data):

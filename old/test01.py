@@ -3,10 +3,11 @@ import numpy as np
 from copy import deepcopy
 
 import data_loader as datagen
-from lib.FuzzyClustring import fuzzy_clustring_algorithm
 from lib.protorypes.Circular import CircularCluster
 from lib.protorypes.Elliptical import EllipticalCluster, EllipticalCluster2
-from lib.protorypes.Linear import LinearCluster
+
+from lib.FuzzyClassifier.FuzzyClustring import fuzzy_clustring_algorithm
+from lib.FuzzyClassifier.protorypes.Linear import LinearCluster
 
 
 def scatter_data(clusters_data):

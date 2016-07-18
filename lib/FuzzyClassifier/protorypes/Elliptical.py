@@ -1,8 +1,8 @@
 import matplotlib.patches as shapes
 import numpy as np
 
-from ..BaseFuzzyCluster import BaseFuzzyCluster
-from .. import FuzzyClassifierException
+from lib import FuzzyClassifierException
+from lib.FuzzyClassifier.BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class EllipticalCluster(BaseFuzzyCluster):

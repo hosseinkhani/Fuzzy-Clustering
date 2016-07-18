@@ -1,9 +1,8 @@
 import matplotlib.patches as shapes
-from scipy.stats import multivariate_normal
 import numpy as np
 
-from ..BaseFuzzyCluster import BaseFuzzyCluster
-from .. import FuzzyClassifierException
+from lib import FuzzyClassifierException
+from lib.FuzzyClassifier.BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class GGCluster(BaseFuzzyCluster):

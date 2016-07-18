@@ -1,11 +1,11 @@
 import matplotlib.patches as shapes
 import numpy as np
 
-from ..BaseFuzzyCluster import BaseFuzzyCluster
-from .. import FuzzyClassifierException
+from lib import FuzzyClassifierException
+from lib.FuzzyClassifier.BaseFuzzyCluster import BaseFuzzyCluster
 
 
-class CircularCluster(BaseFuzzyCluster):
+class CMeanCluster(BaseFuzzyCluster):
     def __init__(self, high, dim):
         self.r = np.random.uniform(high/5)
         self.v = np.random.uniform(high, size=dim)
@@ -17,29 +17,16 @@ class CircularCluster(BaseFuzzyCluster):
         # self.r = sum([uis[i] * np.linalg.norm(xs[i]-self.v) for i in range(len(xs))]) / sum(uis)
 
     def distance(self, x):
-        return (np.linalg.norm(x-self.v)-self.r)**2
+        return np.linalg.norm(x-self.v)**2
 
     def __repr__(self):
-        return "Circular cluster# v={0} r={1}".format(self.v, self.r)
+        return "CMeans cluster# v={0} r={1}".format(self.v, self.r)
 
     def draw(self):
         if self.v.shape[0] > 2:
             raise FuzzyClassifierException("draw works for 2d data not more!")
         res = shapes.Circle(xy=self.v, radius=self.r)
-        res.set_fill(False)
         return res
 
     def center(self):
         return self.v
-
-    def is_same(self, cluster):
-        if type(cluster) != CircularCluster:
-            return False
-        # print np.linalg.norm(cluster.v-self.v) + (cluster.r-self.r)**2, '&'*10
-        return np.linalg.norm(cluster.v-self.v) + (cluster.r-self.r)**2 < 20
-
-    @staticmethod
-    def valid_distance(noise):
-        return 5 * noise**2
-
-# print np.array([1, 2])
