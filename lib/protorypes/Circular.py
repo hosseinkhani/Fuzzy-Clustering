@@ -2,12 +2,13 @@ import matplotlib.patches as shapes
 import numpy as np
 
 from ..BaseFuzzyCluster import BaseFuzzyCluster
+from .. import FuzzyClassifierException
 
 
 class CircularCluster(BaseFuzzyCluster):
-    def __init__(self, low, high, dim):
-        self.r = np.random.uniform(low)
-        self.v = np.random.uniform(low, high, size=dim)
+    def __init__(self, high, dim):
+        self.r = np.random.uniform(high/5)
+        self.v = np.random.uniform(high, size=dim)
 
     def update(self, xs, uis, m):
         self.v = sum([uis[i]**m * xs[i] for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
@@ -22,6 +23,8 @@ class CircularCluster(BaseFuzzyCluster):
         return "Circular cluster# v={0} r={1}".format(self.v, self.r)
 
     def draw(self):
+        if self.v.shape[0] > 2:
+            raise FuzzyClassifierException("draw works for 2d data not more!")
         return shapes.Circle(xy=self.v, radius=self.r)
 
     def center(self):

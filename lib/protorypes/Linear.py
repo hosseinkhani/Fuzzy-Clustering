@@ -2,13 +2,14 @@ import matplotlib.lines as shapes
 import numpy as np
 
 from ..BaseFuzzyCluster import BaseFuzzyCluster
+from .. import FuzzyClassifierException
 
 
 class LinearCluster(BaseFuzzyCluster):
-    def __init__(self, low, high, dim):
+    def __init__(self, high, dim):
         self.e = np.random.uniform(size=dim)
         self.e /= np.linalg.norm(self.e)
-        self.v = np.random.uniform(low, high, size=dim)
+        self.v = np.random.uniform(high, size=dim)
 
     def update(self, xs, uis, m):
         self.v = sum([uis[i]**m * xs[i] for i in range(len(xs))]) / sum([uis[i]**m for i in range(len(xs))])
@@ -31,6 +32,9 @@ class LinearCluster(BaseFuzzyCluster):
         return self.v
 
     def draw(self):
+        if self.v.shape[0] > 2:
+            raise FuzzyClassifierException("draw works for 2d data not more!")
+
         k1 = self.v - 1000 * self.e
         k2 = self.v + 1000 * self.e
         return shapes.Line2D([k1[0], k2[0]], [k1[1], k2[1]], lw=3.)

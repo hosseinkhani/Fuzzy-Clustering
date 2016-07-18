@@ -1,6 +1,12 @@
 # Fuzzy-Clustering
 
-This project started as final project of my Advanced Pattern Recognition course (1/3 points of my final score just in 48 hours!)
-its not documented yet :/
+This project started as final project of my Advanced Pattern Recognition course
+Its not documented yet
 
 still in progress...
+
+# Demo
+run test00.py a simple demo (classify instances of one prototype)
+
+
+NOTE: ellipse prototype hav visual problems (maybe other problems exist too cuz it doesnt work like other prototypes)

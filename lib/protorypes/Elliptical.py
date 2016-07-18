@@ -2,12 +2,13 @@ import matplotlib.patches as shapes
 import numpy as np
 
 from ..BaseFuzzyCluster import BaseFuzzyCluster
+from .. import FuzzyClassifierException
 
 
 class EllipticalCluster(BaseFuzzyCluster):
-    def __init__(self, det, low, high, dim):
-        self.r = np.random.uniform(low)
-        self.v = np.random.uniform(low, high, size=dim)
+    def __init__(self, det, high, dim):
+        self.r = np.random.uniform(high/5)
+        self.v = np.random.uniform(high, size=dim)
         self.det = det
         self.A = np.array([[2, 0], [0, det/20.0]])
 
@@ -27,6 +28,9 @@ class EllipticalCluster(BaseFuzzyCluster):
         return "Elliptical cluster# v={0} r={1}".format(self.v, self.r)
 
     def draw(self):
+        if self.v.shape[0] > 2:
+            raise FuzzyClassifierException("draw works for 2d data not more!")
+
         def eigsorted(cov):
             vals, vecs = np.linalg.eigh(cov)
             order = vals.argsort()[::-1]
@@ -53,11 +57,12 @@ class EllipticalCluster(BaseFuzzyCluster):
     def valid_distance(noise):
         return 10 * noise**2
 
+
 class EllipticalCluster2(BaseFuzzyCluster):
-    def __init__(self, low, high, dim):
-        self.r = np.random.uniform(low)
-        self.v1 = np.random.uniform(low, high, size=dim)
-        self.v2 = np.random.uniform(low, high, size=dim)
+    def __init__(self, high, dim):
+        self.r = np.random.uniform(high/5)
+        self.v1 = np.random.uniform(high, size=dim)
+        self.v2 = np.random.uniform(high, size=dim)
 
     def update(self, xs, uis, m):
         self.v1 = sum([uis[i]**m * (xs[i] + (np.linalg.norm(xs[i]-self.v2)-self.r)*(xs[i]-self.v1)/(np.linalg.norm(xs[i]-self.v1)))
@@ -71,12 +76,19 @@ class EllipticalCluster2(BaseFuzzyCluster):
         return (np.linalg.norm(x-self.v1) + np.linalg.norm(x-self.v2) - self.r)**2
 
     def __repr__(self):
-        return "Elliptical cluster# v1={0} v2={1} r={2}".format(self.v1, self.v2, self.r)
+        return "Elliptical cluster# v={0} r={1}".format(self.center(), self.r)
 
     def draw(self):
-        c = np.dot(self.v1, self.v2)/np.linalg.norm(self.v1)/np.linalg.norm(self.v2)
-        angle = np.arccos(np.clip(c, -1, 1))
-        ellip = shapes.Ellipse(xy=(self.v1+self.v2)/2, width=1.5*self.r, height=self.r, angle=np.rad2deg(angle))
+        if self.v1.shape[0] > 2:
+            raise FuzzyClassifierException("draw works for 2d data not more!")
+
+        c = np.linalg.norm(self.v2-self.v1)/2.0
+        a = self.r + c
+        b = (a**2 - c**2)**.5
+
+        c2 = np.dot(self.v1, self.v2)/np.linalg.norm(self.v1)/np.linalg.norm(self.v2)
+        angle = np.arccos(np.clip(c2, -1, 1))
+        ellip = shapes.Ellipse(xy=(self.v1+self.v2)/2, width=a, height=b, angle=np.rad2deg(angle))
         return ellip
 
     def center(self):

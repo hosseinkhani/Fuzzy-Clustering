@@ -6,6 +6,9 @@ from . import FuzzyClassifierException
 
 
 class FuzzyClassifier(object):
+    """
+    Standard fuzzy classifier
+    """
     def __init__(self, data, clusters, m=2):
         self.X = data
         self.C = clusters
@@ -16,12 +19,13 @@ class FuzzyClassifier(object):
         """
         fit clusters to data
         :param delta: stop critrion value
-        :param m:
         :param plot_level: different plotting levels, values 0:nothing,1:show all together,2:show detailed plots
         """
         plot_level = kwargs.get('plot_level', 0)
-        delta_increase_iteration = kwargs.get('increase_iteration', 100)
-        first_delta = delta
+        verbose_level = kwargs.get('verbose_level', 0)
+        verbose_iteration = kwargs.get('verbose_iteration', 10)
+        delta_increase_iteration = kwargs.get('increase_iteration', 50)
+        delta_increase_factore = kwargs.get('increase_factor', 2)
 
         self.update_memberships()
 
@@ -34,16 +38,30 @@ class FuzzyClassifier(object):
 
             dif = self.update_memberships()
 
-            print iteration, dif
             if dif < delta:
+                print "###", iteration
+                print "finish", dif, ' < ', delta
+                print "distance sum: ", sum([sum([c.distance(x) for x in self.X]) for c in self.C])
                 if plot_level == 1:
                     self.show_plot()
                 elif plot_level == 2:
                     self.show_detailed_plot()
                 return
 
+            if verbose_level == 1:
+                if iteration % verbose_iteration == 0:
+                    print "###", iteration
+                    print dif, ' > ', delta
+                    print "distance sum: ", sum([sum([c.distance(x) for x in self.X]) for c in self.C])
+            elif verbose_level == 2:
+                if iteration % verbose_iteration == 0:
+                    print "###", iteration
+                    print dif, ' > ', delta
+                    print "distance sum: ", sum([sum([c.distance(x) for x in self.X]) for c in self.C])
+                    self.show_detailed_plot()
+
             if iteration % delta_increase_iteration == 0:
-                delta += first_delta
+                delta *= delta_increase_factore
 
     def update_memberships(self):
         max_dif = -1
@@ -78,20 +96,17 @@ class FuzzyClassifier(object):
             shapes = [c.draw() for c in self.C]
             ax = fig.add_subplot(row_num*100 + col_num*10 + selected+1, aspect='equal')
 
-            for i, c in enumerate(self.C):
-                try:
-                    ax.scatter(c.center()[0], c.center()[1], color='black')
-                    ax.add_artist(shapes[i])
-                    shapes[i].set_alpha(.1)
-                    if i == selected:
-                        shapes[i].set_color('red')
-                except FuzzyClassifierException as e:
-                    print e, "No shape or center implemented!"
-
             rgba_colors = np.zeros((len(self.X), 4))
             rgba_colors[:, 0] = 1.0
             rgba_colors[:, 3] = self.U[:, selected]
             ax.scatter(self.X[:, 0], self.X[:, 1], color=rgba_colors)
+
+            for i, c in enumerate(self.C):
+                ax.scatter(c.center()[0], c.center()[1], color='black')
+                ax.add_artist(shapes[i])
+                shapes[i].set_alpha(.1)
+                if i == selected:
+                    shapes[i].set_color('red')
 
             ax.set_xlim(0, 1000)
             ax.set_ylim(0, 1000)
@@ -103,6 +118,8 @@ class FuzzyClassifier(object):
         fig = plt.figure(1)
         ax = fig.add_subplot(111, aspect='equal')
 
+        ax.scatter(self.X[:, 0], self.X[:, 1], lw=0)
+
         for i, c in enumerate(self.C):
             try:
                 ax.scatter(c.center()[0], c.center()[1], color='black')
@@ -110,8 +127,6 @@ class FuzzyClassifier(object):
                 shapes[i].set_alpha(.1)
             except FuzzyClassifierException as e:
                 print e, "No shape or center implemented!"
-
-        ax.scatter(self.X[:, 0], self.X[:, 1], lw=0)
 
         ax.set_xlim(0, 1000)
         ax.set_ylim(0, 1000)
