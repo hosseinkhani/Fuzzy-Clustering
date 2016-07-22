@@ -56,21 +56,42 @@ def generate_2d_cmeans_dataset(clusters, q=1000, noise=10):
 
     return res
 
+
+# bad bad bad
+def generate_2d_porellipse_dataset(ellipses, q=1000, noise=10):
+    res = np.empty((q, 2))
+
+    centers = 1000/5 + np.random.uniform(size=(ellipses, 2)) * 1000*3/5
+    radiuses = 50 + np.random.uniform(size=(ellipses, 2)) * 1000/5
+
+    for i in range(q):
+        ind = np.random.randint(ellipses)
+        alpha = np.random.uniform(high=2*math.pi)
+        h = np.random.uniform(high=radiuses[ind][0])
+        w = np.random.uniform(high=radiuses[ind][1])
+
+        res[i] = centers[ind] + \
+                 np.array([h * math.cos(alpha), w * math.sin(alpha)]) + \
+                 np.array([np.random.randint(noise), np.random.randint(noise)])
+
+    return res
+
+
 def generate_2d_line_dataset(clusters, q=1000, noise=10):
     res = np.zeros((q, 2))
 
     centers = 1000/5 + np.random.uniform(size=(clusters, 2)) * 1000*3/5
     e = np.random.uniform(size=(clusters, 2))
 
-    for i in range(q):
+    i = 0
+    while i < q:
         ind = np.random.randint(clusters)
         point = centers[ind] + \
                 e[ind].T.dot(10+np.random.randint(-500, 500)) + \
                 np.array([np.random.randint(noise), np.random.randint(noise)])
         if 0 < point[0] < 1000 and 0 < point[1] < 1000:
             res[i] = point
-        else:
-            i -= 1
+            i += 1
 
     return res
 

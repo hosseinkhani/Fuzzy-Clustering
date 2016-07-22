@@ -6,8 +6,8 @@ import data_loader as datagen
 from lib.protorypes.Circular import CircularCluster
 from lib.protorypes.Elliptical import EllipticalCluster, EllipticalCluster2
 
-from lib.FuzzyClassifier.FuzzyClustring import fuzzy_clustring_algorithm
-from lib.FuzzyClassifier.protorypes.Linear import LinearCluster
+from lib.fuzzy_classifier.FuzzyClustring import fuzzy_clustring_algorithm
+from lib.fuzzy_classifier.protorypes.Linear import LinearCluster
 
 
 def scatter_data(clusters_data):

@@ -12,7 +12,7 @@ class MultivariateFuzzyClassifier(object):
     def __init__(self, data, clusters, m=2):
         self.X = data
         self.C = clusters
-        self.U = np.empty(tuple([self.X.shape[0], len(self.C), self.X.shape[1]]))
+        self.U = np.empty(tuple([self.X.shape[0], len(self.C), self.X.shape[1]]))  # x,c,f
         self.m = m
 
     def fit(self, delta=0.1, **kwargs):
@@ -34,14 +34,15 @@ class MultivariateFuzzyClassifier(object):
             iteration += 1
 
             for i, c in enumerate(self.C):
-                c.update(self.X, self.U, self.m, i)
+                for j in range(self.X.shape[1]):
+                    c.update(self.X, self.U, j, self.m, i)
 
             dif = self.update_memberships()
 
             if dif < delta:
                 print "###", iteration
                 print "finish", dif, ' < ', delta
-                print "distance sum: ", sum([sum([c.distance(x) for x in self.X]) for c in self.C])
+                print "distance sum: ", sum([c.distance(x, j) for x in self.X for c in self.C for j in range(self.X.shape[1])])
                 if plot_level == 1:
                     self.show_plot()
                 elif plot_level == 2:
@@ -52,12 +53,12 @@ class MultivariateFuzzyClassifier(object):
                 if iteration % verbose_iteration == 0:
                     print "###", iteration
                     print dif, ' > ', delta
-                    print "distance sum: ", sum([sum([c.distance(x) for x in self.X]) for c in self.C])
+                    print "distance sum: ", sum([c.distance(x, j) for x in self.X for c in self.C for j in range(self.X.shape[1])])
             elif verbose_level == 2:
                 if iteration % verbose_iteration == 0:
                     print "###", iteration
                     print dif, ' > ', delta
-                    print "distance sum: ", sum([sum([c.distance(x) for x in self.X]) for c in self.C])
+                    print "distance sum: ", sum([c.distance(x, j) for x in self.X for c in self.C for j in range(self.X.shape[1])])
                     self.show_detailed_plot()
 
             if iteration % delta_increase_iteration == 0:
@@ -67,14 +68,15 @@ class MultivariateFuzzyClassifier(object):
         max_dif = -1
 
         for j, x in enumerate(self.X):
-            for k in range(self.X.shape[1]):
-                distances = [c.distance(x) for c in self.C]
-                for i, c in enumerate(self.C):
-                    old = self.U[j][i]
-                    self.U[j][i] = 1.0 / sum([(distances[i]/distances[k]) ** (1.0/(self.m-1)) for k in range(len(self.C))])
+            distances = [[c.distance(x, k) for k in range(self.X.shape[1])] for c in self.C]
+            for i, c in enumerate(self.C):
+                for k in range(self.X.shape[1]):
+                    old = self.U[j][i][k]
+                    self.U[j][i][k] = 1.0 / sum([sum([(distances[i][k]/distances[h][l]) ** (1.0/(self.m-1))
+                                                      for l in range(self.X.shape[1])]) for h in range(len(self.C))])
 
-                    if max_dif < abs(old - self.U[j][i]):
-                        max_dif = abs(old - self.U[j][i])
+                    if max_dif < abs(old - self.U[j][i][k]):
+                        max_dif = abs(old - self.U[j][i][k])
 
         return max_dif
 
@@ -99,7 +101,7 @@ class MultivariateFuzzyClassifier(object):
 
             rgba_colors = np.zeros((len(self.X), 4))
             rgba_colors[:, 0] = 1.0
-            rgba_colors[:, 3] = self.U[:, selected]
+            rgba_colors[:, 3] = [sum(self.U[xi, selected, :]) for xi in range(len(self.X))]
             ax.scatter(self.X[:, 0], self.X[:, 1], color=rgba_colors)
 
             for i, c in enumerate(self.C):
@@ -140,7 +142,7 @@ class MultivariateFuzzyClassifier(object):
 
         clustered_data = [[] for i in range(len(self.C))]
         for j, x in enumerate(self.X):
-            ci = np.argmax(self.U[j, :])
+            ci = np.argmax([sum(self.U[j, ci, :]) for ci in range(len(self.C))])
             clustered_data[ci].append(x)
 
         colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow']

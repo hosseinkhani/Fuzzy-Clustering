@@ -1,13 +1,13 @@
 import matplotlib.lines as shapes
 import numpy as np
 
-from lib import FuzzyClassifierException
-from lib.FuzzyClassifier.BaseFuzzyCluster import BaseFuzzyCluster
+from ... import FuzzyClassifierException
+from ..BaseFuzzyCluster import BaseFuzzyCluster
 
 
 class LinearCluster(BaseFuzzyCluster):
     def __init__(self, high, dim):
-        self.e = np.random.uniform(size=dim)
+        self.e = np.random.uniform(-1, 1, size=dim)
         self.e /= np.linalg.norm(self.e)
         self.v = np.random.uniform(high, size=dim)
 
